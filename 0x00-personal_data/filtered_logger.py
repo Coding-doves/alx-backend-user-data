@@ -7,6 +7,27 @@ from filtered_formatter import RedactingFormatter
 import csv
 
 
+import os
+import mysql.connector
+
+def get_db():
+    ''' connect to db '''
+    username = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
+    password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
+    host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
+    dbname = os.getenv("PERSONAL_DATA_DB_NAME")
+
+    if not dbname:
+        raise ValueError("Database name not provided in environment variable PERSONAL_DATA_DB_NAME")
+
+    return mysql.connector.connect(
+        user=username,
+        password=password,
+        host=host,
+        database=dbname
+    )
+
+
 def filter_datum(fields, redaction, message, separator):
     return re.sub(r'(?<=^|\{0})[^{1}]+(?={0}|$)'.format(separator, separator), redaction, message)
 
