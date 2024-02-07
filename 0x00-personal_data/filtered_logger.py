@@ -5,10 +5,9 @@ import logging
 from logging import StreamHandler
 from filtered_formatter import RedactingFormatter
 import csv
-
-
 import os
 import mysql.connector
+
 
 def get_db():
     ''' connect to db '''
