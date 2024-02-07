@@ -63,3 +63,24 @@ def get_logger():
     logger.addHandler(stream_handler)
 
     return logger
+
+
+def main():
+    ''' entry point '''
+    logger = get_logger()
+    db_connection = get_db()
+    cursor = db_connection.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM users")
+    rows = cursor.fetchall()
+
+    for row in rows:
+        filtered_row = {key: "***" if key in ["name", "email", "phone", "ssn", "password"] else value for key, value in row.items()}
+        logger.info(filtered_row)
+
+    cursor.close()
+    db_connection.close()
+
+
+if __name__ == "__main__":
+    main()
