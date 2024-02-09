@@ -12,8 +12,13 @@ import mysql.connector
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
-def filter_datum(fields: List[str], redaction: str, message: str, separator: str) -> str:
-    return re.sub(r'(?<=^|\{0})[^{1}]+(?={0}|$)'.format(separator, separator), redaction, message)
+def filter_datum(
+        fields: List[str],
+        redaction: str,
+        message: str,
+        separator: str) -> str:
+    return re.sub(r'(?<=^|\{0})[^{1}]+(?={0}|$)'.format(separator, separator),
+                  redaction, message)
 
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
@@ -24,7 +29,10 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     dbname = os.getenv("PERSONAL_DATA_DB_NAME")
 
     if not dbname:
-        raise ValueError("Database name not provided in environment variable PERSONAL_DATA_DB_NAME")
+        raise ValueError(
+            "Database name not provided in environment variable "
+            "PERSONAL_DATA_DB_NAME"
+        )
 
     return mysql.connector.connect(
         user=username,
@@ -45,9 +53,13 @@ class RedactingFormatter(logging.Formatter):
     def __init__(self, fields):
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
-        
+
     def format(self, record: logging.LogRecord) -> str:
-        record.msg = filter_datum(self.fields, self.REDACTION, record.getMessage(), self.SEPARATOR)
+        record.msg = filter_datum(
+            self.fields,
+            self.REDACTION,
+            record.getMessage(),
+            self.SEPARATOR)
         return super(RedactingFormatter, self).format(record)
 
 
@@ -76,7 +88,12 @@ def main():
     rows = cursor.fetchall()
 
     for row in rows:
-        filtered_row = {key: "***" if key in ["name", "email", "phone", "ssn", "password"] else value for key, value in row.items()}
+        filtered_row = {key: "***" if key in [
+                "name",
+                "email",
+                "phone",
+                "ssn",
+                "password"] else value for key, value in row.items()}
         logger.info(filtered_row)
 
     cursor.close()
