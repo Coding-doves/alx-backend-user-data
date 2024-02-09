@@ -17,6 +17,7 @@ def filter_datum(
         redaction: str,
         message: str,
         separator: str) -> str:
+    ''' filter '''
     return re.sub(r'(?<=^|\{0})[^{1}]+(?={0}|$)'.format(separator, separator),
                   redaction, message)
 
@@ -44,17 +45,19 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
 
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class
-        """
+    """
 
     REDACTION = "***"
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
 
     def __init__(self, fields):
+        ''' initialize '''
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
+        ''' format '''
         record.msg = filter_datum(
             self.fields,
             self.REDACTION,
