@@ -3,13 +3,20 @@
 import re
 import logging
 from logging import StreamHandler
-from filtered_formatter import RedactingFormatter
+from typing import List
 import csv
 import os
 import mysql.connector
 
 
-def get_db():
+PII_FIELDS = ("name", "email", "phone", "ssn", "password")
+
+
+def filter_datum(fields: List[str], redaction: str, message: str, separator: str) -> str:
+    return re.sub(r'(?<=^|\{0})[^{1}]+(?={0}|$)'.format(separator, separator), redaction, message)
+
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
     ''' connect to db '''
     username = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
     password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
@@ -27,10 +34,6 @@ def get_db():
     )
 
 
-def filter_datum(fields, redaction, message, separator):
-    return re.sub(r'(?<=^|\{0})[^{1}]+(?={0}|$)'.format(separator, separator), redaction, message)
-
-
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class
         """
@@ -44,13 +47,11 @@ class RedactingFormatter(logging.Formatter):
         self.fields = fields
         
     def format(self, record: logging.LogRecord) -> str:
-        record.msg = filter_datum(self.fields, self.REDACTION, record.msg, self.SEPARATOR)
-        return super().format(record)
+        record.msg = filter_datum(self.fields, self.REDACTION, record.getMessage(), self.SEPARATOR)
+        return super(RedactingFormatter, self).format(record)
 
 
-PII_FIELDS = ("name", "email", "phone", "address", "credit_card")
-
-def get_logger():
+def get_logger() -> logging.Logger:
     ''' logger '''
     logger = logging.getLogger("user_data")
     logger.setLevel(logging.INFO)
