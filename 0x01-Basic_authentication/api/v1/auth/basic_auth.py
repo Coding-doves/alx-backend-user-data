@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ basic_auth """
-from api.v1.auth.auth import Auth
+import re
+from .auth import Auth
 
 
 class BasicAuth(Auth):
@@ -12,4 +13,9 @@ class BasicAuth(Auth):
         ''' extract '''
         if authorization_header is None:
             return None
-        if authorization_header is not 
+        if type(authorization_header) == str:
+            pat = r'Basic (?P<token>.+)'
+            match = re.fullmatch(pat, authorization_header.strip())
+            if match is not None:
+                return match.group('token')
+            return None
