@@ -4,6 +4,7 @@ import re
 from .auth import Auth
 import base64
 import binascii
+from typing import Tuple
 
 
 class BasicAuth(Auth):
