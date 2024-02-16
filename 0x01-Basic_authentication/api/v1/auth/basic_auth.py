@@ -2,6 +2,8 @@
 """ basic_auth """
 import re
 from .auth import Auth
+import base64
+import binascii
 
 
 class BasicAuth(Auth):
@@ -19,3 +21,18 @@ class BasicAuth(Auth):
             if match is not None:
                 return match.group('token')
             return None
+
+    def decode_base64_authorization_header(
+            self,
+            base64_authorization_header: str,
+            ) -> str:
+        """ decode """
+        if type(base64_authorization_header) == str:
+            try:
+                result = base64.b64decode(
+                    base64_authorization_header,
+                    validate=True,
+                )
+                return result.decode('utf-8')
+            except (binascii.Error, UnicodeDecodeError):
+                return None
