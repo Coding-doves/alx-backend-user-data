@@ -36,3 +36,23 @@ class BasicAuth(Auth):
                 return result.decode('utf-8')
             except (binascii.Error, UnicodeDecodeError):
                 return None
+
+    def extract_user_credentials(
+            self,
+            decoded_base64_authorization_header: str,
+            ) -> Tuple[str, str]:
+        """
+            extract user credentials from the base64-decoded
+            authorization header module
+        """
+        if type(decoded_base64_authorization_header) == str:
+            pattern = r'(?P<user>[^:]+):(?P<password>.+)'
+            match = re.fullmatch(
+                pattern,
+                decoded_base64_authorization_header.strip(),
+            )
+            if match is not None:
+                user = match.group('user')
+                password = match.group('password')
+                return user, password
+        return None, None
