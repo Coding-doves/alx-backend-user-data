@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ Module of Session views
 """
-from flask import jsonify, request
+from flask import jsonify, request, abort
 from models.user import User
 from Typing import Tuple
 from api.v1.views import app_views
@@ -9,7 +9,7 @@ from os import getenv
 
 @app_views.route(
         '/auth_session/login',
-        method=["POST"],
+        methods=["POST"],
         strict_slashes=False
         )
 def user_login() -> [str, int]:
@@ -37,7 +37,7 @@ def user_login() -> [str, int]:
 
 @app_views.route(
         "/auth_session/logout",
-        method=["DELETE"],
+        methods=["DELETE"],
         strict_slashes=False
         )
 def logout() -> Tuple[str, int]:
