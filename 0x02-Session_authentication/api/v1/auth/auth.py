@@ -32,3 +32,10 @@ class Auth:
     def current_user(self, request=None) -> TypeVar('User'):
         ''' current_user '''
         return None
+    
+    def session_cookie(self, request=None):
+        if request is None:
+            return None
+        my_session_name = os.geten("SESSION_NAME")
+        cookie = request.cookies.get(my_session_name)
+        return cookie
