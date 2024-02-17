@@ -34,7 +34,7 @@ class Auth:
         ''' current_user '''
         return None
     
-    def session_cookie(self, request=None):
+    def session_cookie(self, request=None) -> str:
         ''' session cookies '''
         if request:
             my_cookie_name = os.geten("SESSION_NAME")

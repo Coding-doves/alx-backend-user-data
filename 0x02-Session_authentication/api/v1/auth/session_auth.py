@@ -2,8 +2,8 @@
 """ Module of Session views
 """
 import uuid
-from flask import abort, jsonify, request
 from .auth import Auth
+from models.user import User
 
 
 class SessionAuth(Auth):
@@ -28,3 +28,19 @@ class SessionAuth(Auth):
         if not isinstance(session_id, str):
             return None
         return self.user_id_by_session_id.get(session_id)
+
+    def current_user(self, request=None) -> User:
+        ''' returns User'''
+        user_id = self.user_id_for_session_id(self.session_cookie(request))
+        return User.get(user_id)
+
+    def destroy_session(self, request=None):
+        ''' logout and destory '''
+        session_id = self.session_cookie(request)
+        user = self.user_id_by_session_id(session_id)
+        if ((request is None or session_id is None) or user is None):
+            return False
+        
+        if session_id in self.user_id_by_session_id:
+            del self.user_id_by_session_id[session_id]
+        return True
