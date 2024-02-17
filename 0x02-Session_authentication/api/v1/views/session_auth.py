@@ -12,7 +12,7 @@ from os import getenv
         methods=["POST"],
         strict_slashes=False
         )
-def user_login() -> [str, int]:
+def user_login() -> Tuple[str, int]:
     ''' login authentication'''
     email = request.form.get('email')
     if email is None or len(email.strip()) == 0:
