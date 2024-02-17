@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """ Module of Session views
 """
-import os
 import uuid
 from flask import abort, jsonify, request
 from .auth import Auth
