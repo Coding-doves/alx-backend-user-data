@@ -48,4 +48,4 @@ def logout() -> Tuple[str, int]:
     destroy_session = auth.destroy_session(request)
     if not destroy_session:
         abort(404)
-        return jsonify({})
+    return jsonify({})
