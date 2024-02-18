@@ -3,7 +3,7 @@
 
 from flask import jsonify, request, abort
 from models.user import User
-from Typing import Tuple
+from typing import Tuple
 from api.v1.views import app_views
 from os import getenv
 
