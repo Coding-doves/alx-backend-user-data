@@ -28,10 +28,8 @@ def user_login() -> Tuple[str, int]:
     except Exception as e:
         return { "error": "no user found for this email" }, 404
 
-    if not users:
+    if not user:
         return jsonify({ "error": "no user found for this email" }), 404
-
-    user = users[0]
 
     if user[0].is_valid_password(password):
         from api.v1.app import auth
