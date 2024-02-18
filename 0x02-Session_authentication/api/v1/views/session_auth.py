@@ -14,7 +14,7 @@ from os import getenv
         strict_slashes=False
         )
 def user_login() -> Tuple[str, int]:
-    ''' login authentication'''
+    ''' login authentication '''
     email = request.form.get('email')
     if email is None or len(email.strip()) == 0:
         return jsonify({ "error": "email missing" }), 400
