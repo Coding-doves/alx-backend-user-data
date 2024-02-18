@@ -7,6 +7,7 @@ from Typing import Tuple
 from api.v1.views import app_views
 from os import getenv
 
+
 @app_views.route(
         '/auth_session/login',
         methods=["POST"],
