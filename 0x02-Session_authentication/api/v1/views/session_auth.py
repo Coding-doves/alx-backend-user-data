@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-""" Module of Session views
-"""
+""" Module of Session views """
+
 from flask import jsonify, request, abort
 from models.user import User
 from Typing import Tuple
@@ -44,6 +44,7 @@ def user_login() -> Tuple[str, int]:
 def logout() -> Tuple[str, int]:
     ''' logout '''
     from api.v1.app import auth
+    ''' logout '''
     destroy_session = auth.destroy_session(request)
     if not destroy_session:
         abort(404)
