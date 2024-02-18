@@ -16,11 +16,11 @@ from os import getenv
 def user_login() -> Tuple[str, int]:
     ''' login authentication '''
     email = request.form.get('email')
-    if email is None or len(email.strip()) == 0:
+    if not email:
         return jsonify({ "error": "email missing" }), 400
 
     password = request.form.get('password')
-    if password is None or len(password.strip()) == 0:
+    if not password:
         return jsonify({ "error": "password missing" }), 400
 
     try:
@@ -30,7 +30,7 @@ def user_login() -> Tuple[str, int]:
 
     if user[0].is_valid_password(password):
         from api.v1.app import auth
-        session_id = auth.create_session(getattr(user[0], "id"))
+        session_id = auth.create_session(user[0].id)
         response = jsonify(user[0].to_json())
         response.set_cookie(getenv("SESSION_NAME"), session_id)
         return response, 200
