@@ -38,17 +38,16 @@ class SessionAuth(Auth):
         ''' logout and destory '''
         if request is None:
             return False
-            
+
         session_id = self.session_cookie(request)
         if session_id is None:
             return False
-            
-        user = self.user_id_by_session_id(session_id)
-        if user is None:
-            return False
 
-        if session_id in self.user_id_by_session_id:
+        user = self.user_id_by_session_id(session_id)
+        if user is not None:
+            # return True
+            # if session_id in self.user_id_by_session_id:
             del self.user_id_by_session_id[session_id]
             return True
-        
+
         return False
