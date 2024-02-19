@@ -48,7 +48,7 @@ def user_login() -> Tuple[str, int]:
 def logout() -> Tuple[str, int]:
     ''' logout '''
     from api.v1.app import auth
-    destroy_session = auth.destroy_session(request)
-    if not destroy_session:
-        abort(404)
-    return jsonify({}), 200
+    if auth.destroy_session(request):
+        return jsonify({}), 200
+    else:
+        abort(404) 
