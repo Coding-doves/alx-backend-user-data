@@ -19,7 +19,7 @@ def _generate_uuid():
     ''' generate uuid '''
     return str(uuid.uuid4())
 
-    
+
 class Auth:
     """Auth class to interact with the authentication database.
     """
@@ -32,6 +32,7 @@ class Auth:
         user = self._db.find_user_by(email=email)
         if user is not None:
             raise ValueError(f"User {email} already exists")
+        
         hashed_password = _hash_password(password)
         return self._db.add_user(email, hashed_password)
 
@@ -46,7 +47,7 @@ class Auth:
     def create_session(self, email: str) -> str:
         ''' create session '''
         usr = self._db.find_user_by(email=email)
-        
+
         if usr:
             session_id = _generate_uuid()
             usr.session_id = session_id
