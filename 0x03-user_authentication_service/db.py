@@ -33,36 +33,26 @@ class DB:
 
     def add_user(self, email: str, hashed_password: str) -> User:
         """ add new user """
-        if isinstance(email, str):
-            user = User(email=email, hashed_password=hashed_password)
-            self._session.add(user)
-            self._session.commit()
-            
-            return user
+        user = User(email=email, hashed_password=hashed_password)
+        self._session.add(user)
+        self._session.commit()
+        return user
 
     def find_user_by(self, **kwargs) -> User:
         ''' find user by filter'''
-        user = self._session.query(User)
-        for key, val in kwargs.items():
-            if key not in User.__dict__:
-                raise InvalidRequestError
-            for person in user:
-                if getattr(person, key) == val:
-                    return person
-                raise NoResultFound
+        try:
+            user = self._session.query(User).filter_by(**kwargs).one()
+            return user
+        except NoResultFound:
+            return None
+        except InvalidRequestError:
+            raise InvalidRequestError("Invalid filter provided")
 
     def update_user(self, user_id: int, **kwargs) -> None:
         ''' update user '''
         user = self.find_user_by(id=user_id)
         if user is None:
             return
-        updat = {}
         for key, val in kwargs.items():
-            if hasattr(User, key):
-                updat[getattr(User, key)] = val
-            else:
-                raise ValueError()
-        self._session.query(User).filter(
-            User.id == user_id).update(
-                updat, synchronize_session=False,)
+            setattr(user, key, val)
         self._session.commit()
