@@ -36,7 +36,7 @@ def login() -> str:
     res = jsonify({"email": email, "message": "logged in"})
     res.set_cookie("session_id", session_id)
     return res
-    
+
 
 @app.route("/sessions", methods=["DELETE"], strict_slashes=False)
 def logout() -> str:
@@ -68,7 +68,7 @@ def get_reset_password_token() -> str:
         reset_token = AUTH.get_reset_password_token(email)
     except ValueError:
         reset_token = None
-        
+
     if reset_token is None:
         abort(403)
     return jsonify({"email": email, "reset_token": reset_token})
@@ -81,7 +81,7 @@ def update_password() -> str:
     reset_token = request.form.get("reset_token")
     new_password = request.form.get("new_password")
     password_changed = False
-    
+
     try:
         Auth.update_password(reset_token, new_password)
         password_changed = True
