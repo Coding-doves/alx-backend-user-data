@@ -21,7 +21,7 @@ try:
     user = auth.register_user(email, password)
     print("successfully created a new user!")
 except ValueError as err:
-    print("could not create a new user: {}".format(err))  
+    print("could not create a new user: {}".format(err))
 
 
 # from auth import _hash_password
@@ -69,7 +69,7 @@ except ValueError as err:
 #     find_user = my_db.find_user_by(no_email="test@test.com")
 #     print(find_user.id)
 # except InvalidRequestError:
-#     print("Invalid")  
+#     print("Invalid")
 
 
 # my_db = DB()
